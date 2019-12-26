@@ -4,5 +4,5 @@ export function calculateMonthlyPayment(noOfMonths: number, amountFinanced: numb
     console.log('noOfMonths:', noOfMonths, ', amountFinanced:', amountFinanced)
     return null;
   }
-  return Number(amountFinanced)/Number(noOfMonths);
+  return Number(amountFinanced) / Number(noOfMonths);
 }

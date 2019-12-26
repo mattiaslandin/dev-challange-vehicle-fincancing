@@ -1,37 +1,97 @@
-import React, { useState } from "react";
-import { CalculationType } from './Calculator'
+import React from "react";
 
-interface IProps {
-  type: CalculationType
-  calculation: (a: number, b: number) => Promise<any>
+export interface CalculationFormProps {
+  fieldAName: string
+  fieldBName: string
+  resultName: string
+  onSubmit: (a: number, b: number) => void
 }
 
-export const CalculationForm: React.FC<IProps> = ({ type, calculation }) => {
-  const [fieldA, setFieldA] = useState("");
-  const [fieldB, setFieldB] = useState("");
-  const [result, setResult] = useState("");
+export interface CalculationFormState {
+  fieldA: string
+  fieldB: string
+  result: string
+}
 
-  return (
-    <div>
-      <form
-        onSubmit={ event => {
-          if (event) {
-            event.preventDefault();
+// export const CalculationForm: React.FC<CalculationFormProps> = ({ fieldAName, fieldBName, resultName, calculation }) => {
+//   const [fieldA, setFieldA] = useState("");
+//   const [fieldB, setFieldB] = useState("");
+//   const [result, setResult] = useState("");
+//   console.log('WHat??')
+
+//   useEffect(() => {
+//     return () => {
+//       setFieldA("")
+//       // setFieldB("")
+//       setResult("")
+//     };
+//   });
+
+//   return (
+//     <div>
+//       <form
+//         onSubmit={ event => {
+//           if (event) {
+//             event.preventDefault();
+//           }
+//           calculation(Number(fieldA), Number(fieldB)).then(data => setResult(data.result));
+//         }
+//       }>
+//         <label>
+//           { fieldAName }:
+//           <input type="number" value={fieldA} onChange={ event => setFieldA(event.target.value) } />
+//         </label>
+//         <label>
+//           { fieldBName }:
+//           <input type="number" value={fieldB} onChange={ event => setFieldB(event.target.value) } />
+//         </label>
+//         <input type="submit" value="Submit" />
+//       </form>
+//       { resultName }: {result}
+//     </div>
+//   );
+// }
+
+
+export class CalculationForm extends React.Component<CalculationFormProps, CalculationFormState> {
+
+  constructor(props: CalculationFormProps) {
+    super(props);
+    this.state = {
+      fieldA: "",
+      fieldB: "",
+      result: ""
+    };
+  }
+
+  render = () => {
+    const { fieldAName, fieldBName, resultName, onSubmit } = this.props;
+    const { fieldA, fieldB, result } = this.state;
+    // const setResult = (result: string) => this.setState({ result })
+    const setFieldA = (fieldA: string) => this.setState({ fieldA })
+    const setFieldB = (fieldB: string) => this.setState({ fieldB })
+
+    return (
+      <div>
+        <form
+          onSubmit={ event => {
+            if (event) {
+              event.preventDefault();
+            }
+            onSubmit(Number(fieldA), Number(fieldB));
           }
-          calculation(Number(fieldA), Number(fieldB)).then(res => setResult(res));
-        }
-      }>
-        <label>
-          Name:
-          <input type="number" value={fieldA} onChange={ event => setFieldA(event.target.value) } />
-        </label>
-        <label>
-          Value:
-          <input type="number" value={fieldB} onChange={ event => setFieldB(event.target.value) } />
-        </label>
-        <input type="submit" value="Submit" />
-      </form>
-      Result: {result}
-    </div>
-  );
+        }>
+          <label>
+            { fieldAName }:
+            <input type="number" value={fieldA} onChange={ event => setFieldA(event.target.value) } />
+          </label>
+          <label>
+            { fieldBName }:
+            <input type="number" value={fieldB} onChange={ event => setFieldB(event.target.value) } />
+          </label>
+          <input type="submit" value="Submit" />
+        </form>
+      </div>
+    );
+  }
 }
