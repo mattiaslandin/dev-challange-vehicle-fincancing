@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Header } from './Header';
 import { Tab } from './Tab';
 import { CalculationForm, CalculationFormProps } from './CalculationForm';
+import { NoOfPaymentsForm } from './NoOfPaymentsForm';
 import * as services from '../services'
 
 const MIN_MONTHS = 6;
@@ -43,7 +44,7 @@ export const Calculator: React.FC = () => {
     fieldBName: 'Car cost',
     resultName: 'Monthly payment',
     onSubmit: (a: number, b: number) => {
-      services.fetchNoOfMontsCalculation(a, b).then(data => setResults({ ...results, resultA: data.result}))
+      services.fetchNoOfPaymentsCalculation(a, b).then(data => setResults({ ...results, resultA: data.result}))
     }
   }
 
@@ -85,13 +86,7 @@ export const Calculator: React.FC = () => {
           active={ activeTab === CalculationType.monthlyPayment }
         />
       </div>
-      { activeTab === CalculationType.noOfPayments && (
-        <>
-          <CalculationForm {...noOfPaymentsArg} />
-          Resultat: {results.resultA}
-          { displayNoOfPaymentsError(results.resultA) }
-        </>
-      )}
+      { activeTab === CalculationType.noOfPayments && <NoOfPaymentsForm /> }
       { activeTab === CalculationType.amountFinanced && (
         <>
           <CalculationForm {...amountFinancedArg} />

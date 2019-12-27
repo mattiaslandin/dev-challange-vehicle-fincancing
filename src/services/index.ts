@@ -1,3 +1,3 @@
 export { fetchMonthlyPaymentCalculation } from './fetchMonthlyPaymentCalculation';
-export { fetchNoOfMontsCalculation } from './fetchNoOfMontsCalculation';
+export { fetchNoOfPaymentsCalculation } from './fetchNoOfPaymentsCalculation';
 export { fetchAmountFinancedCalculation } from './fetchAmountFinancedCalculation';
