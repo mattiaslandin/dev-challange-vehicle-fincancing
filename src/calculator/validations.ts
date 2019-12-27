@@ -1,4 +1,4 @@
-import { MIN_MONTHS, MAX_MONTHS, MIN_COST, MAX_COST } from '../config/config'
+import { MIN_MONTHS, MAX_MONTHS, MIN_COST, MAX_COST } from '../../common/config'
 
 export enum ValidationResult {
   TOO_SMALL,
