@@ -1,4 +1,4 @@
-import { MIN_MONTHS, MAX_MONTHS, MIN_COST, MAX_COST } from '../../common/config'
+import { MIN_MONTHS, MAX_MONTHS, MIN_COST, MAX_COST } from '../config'
 
 export enum ValidationResult {
   TOO_SMALL,
@@ -7,44 +7,46 @@ export enum ValidationResult {
   EMPTY
 }
 
-export const checkAmountFinanced = (amountFinanced: number): ValidationResult => {
-  if(amountFinanced === null || amountFinanced === undefined) {
+export const checkAmountFinanced = (amountFinanced: string): ValidationResult => {
+  if(!amountFinanced) {
     return ValidationResult.EMPTY
   }
-  if(amountFinanced >= MIN_COST  && amountFinanced <= MAX_COST) {
+  const amountFinancedNr = Number(amountFinanced)
+  if(amountFinancedNr >= MIN_COST  && amountFinancedNr <= MAX_COST) {
     return ValidationResult.OK;
   }
 
-  return amountFinanced < MIN_COST ?  ValidationResult.TOO_SMALL : ValidationResult.TOO_BIG;
+  return amountFinancedNr < MIN_COST ?  ValidationResult.TOO_SMALL : ValidationResult.TOO_BIG;
 }
 
-export const checkNoOfPayments = (noOfPayments: number): ValidationResult => {
-  if(noOfPayments === null || noOfPayments === undefined) {
+export const checkNoOfPayments = (noOfPayments: string): ValidationResult => {
+  if(!noOfPayments) {
     return ValidationResult.EMPTY
   }
-  if(noOfPayments >= MIN_MONTHS  && noOfPayments <= MAX_MONTHS) {
+  const noOfPaymentsNr = Number(noOfPayments);
+  if(noOfPaymentsNr >= MIN_MONTHS  && noOfPaymentsNr <= MAX_MONTHS) {
     return ValidationResult.OK;
   }
 
-  return noOfPayments < MIN_MONTHS ?  ValidationResult.TOO_SMALL : ValidationResult.TOO_BIG;
+  return noOfPaymentsNr < MIN_MONTHS ?  ValidationResult.TOO_SMALL : ValidationResult.TOO_BIG;
 }
 
-export const checkMonthlyPayment = (monthlyPayment: number): ValidationResult => {
-  if(monthlyPayment === null || monthlyPayment === undefined) {
+export const checkMonthlyPayment = (monthlyPayment: string): ValidationResult => {
+  if(!monthlyPayment) {
     return ValidationResult.EMPTY
   }
-
-  return monthlyPayment < 0 ?  ValidationResult.TOO_SMALL : ValidationResult.OK;
+  const monthlyPaymentNr = Number(monthlyPayment);
+  return monthlyPaymentNr < 0 ?  ValidationResult.TOO_SMALL : ValidationResult.OK;
 }
 
-export const getNoOfPaymentsStatusText = (noOfMonths: string | number): string => {
-  const result = checkNoOfPayments(Number(noOfMonths));
+export const getNoOfPaymentsStatusText = (noOfMonths: string): string => {
+  const result = checkNoOfPayments(noOfMonths);
 
   switch (result) {
     case ValidationResult.OK:
       return "";
     case ValidationResult.EMPTY:
-      return ``;
+      return "";
     case ValidationResult.TOO_SMALL:
       return `No of months is too low, must be a number between ${MIN_MONTHS} and ${MAX_MONTHS}`;
     case ValidationResult.TOO_BIG:
@@ -52,14 +54,16 @@ export const getNoOfPaymentsStatusText = (noOfMonths: string | number): string =
   }
 }
 
-export const getAmountFinancedStatusText = (amountFinanced: string | number): string => {
-  const result = checkAmountFinanced(Number(amountFinanced));
+export const getAmountFinancedStatusText = (amountFinanced: string): string => {
+  const result = checkAmountFinanced(amountFinanced);
+
+  console.log('result:', result);
 
   switch (result) {
     case ValidationResult.OK:
       return "";
     case ValidationResult.EMPTY:
-      return ``;
+      return "";
     case ValidationResult.TOO_SMALL:
       return `Amount financed too low, must be a number between ${MIN_COST} and ${MAX_COST}`;
     case ValidationResult.TOO_BIG:
@@ -67,8 +71,8 @@ export const getAmountFinancedStatusText = (amountFinanced: string | number): st
   }
 }
 
-export const getMonthlyPaymentStatusText = (monthlyPayment: string | number): string => {
-  const result = checkMonthlyPayment(Number(monthlyPayment));
+export const getMonthlyPaymentStatusText = (monthlyPayment: string): string => {
+  const result = checkMonthlyPayment(monthlyPayment);
 
   switch (result) {
     case ValidationResult.OK:

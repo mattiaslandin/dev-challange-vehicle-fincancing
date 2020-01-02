@@ -1,4 +1,4 @@
-import { MIN_MONTHS, MAX_MONTHS, MIN_COST, MAX_COST } from '../common/config';
+import { MIN_MONTHS, MAX_MONTHS, MIN_COST, MAX_COST } from './config';
 
 export const validateDeal = (noOfMonths: number, amountFinanced:number, monthlyPayment: number) =>
     validNoOfMonths(Number(noOfMonths)) &&

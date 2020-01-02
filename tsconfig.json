@@ -20,6 +20,6 @@
     "jsx": "react"
   },
   "include": [
-    "src", "common/config.ts"
+    "src", "lease-service/config.ts"
   ]
 }

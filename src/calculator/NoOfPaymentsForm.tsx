@@ -1,9 +1,14 @@
 import React from "react";
 import { fetchNoOfPaymentsCalculation } from '../services';
+import { applyForDeal } from '../services/applyForDeal'
 import {
   getAmountFinancedStatusText,
   getMonthlyPaymentStatusText,
-  getNoOfPaymentsStatusText
+  getNoOfPaymentsStatusText,
+  checkAmountFinanced,
+  checkMonthlyPayment,
+  checkNoOfPayments,
+  ValidationResult
 } from './validations';
 
 export interface CalculationFormState {
@@ -51,6 +56,26 @@ export class NoOfPaymentsForm extends React.Component<{}, CalculationFormState> 
     )
   }
 
+  allValuesValid = () => {
+    const { amountFinanced, monthlyPayment, noOfPaymentsResult } = this.state;
+    const amountFinancedState = checkAmountFinanced(amountFinanced);
+    const monthlyPaymentState = checkMonthlyPayment(monthlyPayment);
+    const noOfPaymentsState = checkNoOfPayments(noOfPaymentsResult);
+    return amountFinancedState === ValidationResult.OK &&
+           monthlyPaymentState === ValidationResult.OK &&
+           noOfPaymentsState   === ValidationResult.OK
+  }
+
+  renderApplicationArea = () => {
+    return (
+      <div>
+        <button onClick={applyForDeal()} >
+          Apply for deal
+        </button>
+      </div>
+    )
+  }
+
   render = () => {
     const { monthlyPayment: fieldA, amountFinanced: fieldB, noOfPaymentsResult: result } = this.state;
     const setNoOfPaymentsResult = (noOfPaymentsResult: string) => this.setState({ noOfPaymentsResult })
@@ -77,9 +102,11 @@ export class NoOfPaymentsForm extends React.Component<{}, CalculationFormState> 
             <input type="number" value={fieldB} onChange={ event => setAmountFinanced(event.target.value) } />
           </label>
           <input type="submit" value="Submit" />
-          No of payments: { result }
+          No of payments: { Number(result).toFixed(2) }
           { this.displayNoOfPaymentsError() }
+          { result }
         </form>
+        { this.allValuesValid() && this.renderApplicationArea() }
       </div>
     );
   }
