@@ -20,6 +20,7 @@ export interface CalculationFormState {
   amountFinanced: string
   noOfPaymentsResult: string
   showApplicationModal: boolean,
+  showErrors: boolean,
   applyForDealMsg: string,
   modalLoading: boolean,
 }
@@ -33,6 +34,7 @@ export class NoOfPaymentsForm extends React.Component<{}, CalculationFormState> 
       amountFinanced: "",
       noOfPaymentsResult: "",
       showApplicationModal: false,
+      showErrors: false,
       applyForDealMsg: "",
       modalLoading: false,
     };
@@ -66,6 +68,14 @@ export class NoOfPaymentsForm extends React.Component<{}, CalculationFormState> 
     )
   }
 
+  inputFieldsValid = () => {
+    const { amountFinanced, monthlyPayment } = this.state;
+    const amountFinancedState = checkAmountFinanced(amountFinanced);
+    const monthlyPaymentState = checkMonthlyPayment(monthlyPayment);
+    return amountFinancedState === ValidationResult.OK &&
+           monthlyPaymentState === ValidationResult.OK;
+  }
+
   allValuesValid = () => {
     const { amountFinanced, monthlyPayment, noOfPaymentsResult } = this.state;
     const amountFinancedState = checkAmountFinanced(amountFinanced);
@@ -73,7 +83,7 @@ export class NoOfPaymentsForm extends React.Component<{}, CalculationFormState> 
     const noOfPaymentsState = checkNoOfPayments(noOfPaymentsResult);
     return amountFinancedState === ValidationResult.OK &&
            monthlyPaymentState === ValidationResult.OK &&
-           noOfPaymentsState   === ValidationResult.OK
+           noOfPaymentsState   === ValidationResult.OK;
   }
 
   renderApplicationArea = () => {
@@ -97,6 +107,22 @@ export class NoOfPaymentsForm extends React.Component<{}, CalculationFormState> 
 
   closeModal = () => this.setState({ showApplicationModal: false, applyForDealMsg: "" });
 
+  onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    if (event) {
+      event.preventDefault();
+    }
+    const {
+      monthlyPayment,
+      amountFinanced,
+    } = this.state;
+    const setNoOfPaymentsResult = (noOfPaymentsResult: string) => this.setState({ noOfPaymentsResult });
+    if(!this.inputFieldsValid()) {
+      this.setState({ showErrors: true });
+    } else {
+      fetchNoOfPaymentsCalculation(Number(monthlyPayment), Number(amountFinanced)).then(data => setNoOfPaymentsResult(data.result));
+    }
+  }
+
   render = () => {
     const {
       monthlyPayment: fieldA,
@@ -104,24 +130,19 @@ export class NoOfPaymentsForm extends React.Component<{}, CalculationFormState> 
       noOfPaymentsResult: result,
       applyForDealMsg,
       modalLoading,
-      showApplicationModal
+      showApplicationModal,
+      showErrors,
     } = this.state;
     console.log('State:', this.state);
-    const setNoOfPaymentsResult = (noOfPaymentsResult: string) => this.setState({ noOfPaymentsResult })
     const setMonthlyPayment = (monthlyPayment: string) => this.setState({ monthlyPayment });
     const setAmountFinanced = (amountFinanced: string) => this.setState({ amountFinanced });
 
     return (
       <div>
         <form
-          onSubmit={ event => {
-            if (event) {
-              event.preventDefault();
-            }
-            fetchNoOfPaymentsCalculation(Number(fieldA), Number(fieldB)).then(data => setNoOfPaymentsResult(data.result));
-          }
-        }>
-          { this.renderInputError() }
+          onSubmit={ event => this.onSubmit(event) }
+        >
+          { showErrors && this.renderInputError() }
           <label>
             Monthly payment:
             <input type="number" value={fieldA} onChange={ event => setMonthlyPayment(event.target.value) } />
