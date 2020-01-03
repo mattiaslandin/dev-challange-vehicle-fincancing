@@ -1,7 +1,7 @@
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
 import { calculateMonthlyPayment } from './calculations/calculateMonthlyPayment';
-import { calculateNoOfMonths } from './calculations/calculateNoOfMonths';
+import { calculateNoOfPayments } from './calculations/calculateNoOfPayments';
 import { calculateAmountFinanced } from './calculations/calculateAmountFinanced';
 import { validateDeal } from './validateDeal';
 import * as cors from 'cors';
@@ -13,32 +13,40 @@ app.use(bodyParser.json())
 app.get('/', (req, res) => res.send('Hello and welcome to siemens vehicle leasing service!'));
 
 app.get('/monthlyPayment', (req, res) => {
-  const noOfMonths = req.query.noOfMonths;
+  console.log('/monthlyPayment:', req.body);
+  const noOfPayments = req.query.noOfPayments;
   const amountFinanced = req.query.amountFinanced;
 
-  const result = calculateMonthlyPayment(noOfMonths, amountFinanced)
+  const result = calculateMonthlyPayment(noOfPayments, amountFinanced);
   return res.status(200).json({ result });
 });
-app.get('/noOfMonths', (req, res) => {
+app.get('/noOfPayments', (req, res) => {
+  console.log('/noOfPayments:', req.body);
   const monthlyPayment = req.query.monthlyPayment;
   const amountFinanced = req.query.amountFinanced;
 
-  const result = calculateNoOfMonths(monthlyPayment, amountFinanced)
+  const result = calculateNoOfPayments(monthlyPayment, amountFinanced);
   return res.status(200).json({ result });
 });
 app.get('/amountFinanced', (req, res) => {
-  const noOfMonths = req.query.noOfMonths;
+  console.log('/amountFinanced:', req.body);
+  const noOfPayments = req.query.noOfPayments;
   const monthlyPayment = req.query.monthlyPayment;
 
-  const result = calculateAmountFinanced(noOfMonths, monthlyPayment)
+  const result = calculateAmountFinanced(noOfPayments, monthlyPayment);
   return res.status(200).json({ result });
 });
 app.post('/deal', (req, res) => {
   console.log('/deal:', req.body);
-  console.log('/validateDeal(req.body.noOfMonths, req.body.amountFinanced, req.body.monthlyPayment):', validateDeal(req.body.noOfMonths, req.body.amountFinanced, req.body.monthlyPayment));
-  return validateDeal(req.body.noOfMonths, req.body.amountFinanced, req.body.monthlyPayment) ?
-    res.status(200).send('Lease applied for successfully') :
-    res.status(400).send('Invalid lease parameters!')
+  console.log('/validateDeal(req.body.noOfPayments, req.body.amountFinanced, req.body.monthlyPayment):', validateDeal(req.body.noOfPayments, req.body.amountFinanced, req.body.monthlyPayment));
+  return validateDeal(req.body.noOfPayments, req.body.amountFinanced, req.body.monthlyPayment) ?
+    res.status(200).json({
+      msg:'Lease applied for successfully',
+      noOfPayments: req.body.noOfPayments,
+      amountFinanced: req.body.amountFinanced,
+      monthlyPayment: req.body.monthlyPayment
+    }) :
+    res.status(400).json({msg: 'Invalid lease parameters!'});
 });
 
 

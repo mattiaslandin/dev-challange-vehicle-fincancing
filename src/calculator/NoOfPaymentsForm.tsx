@@ -1,6 +1,6 @@
 import React from "react";
 import { fetchNoOfPaymentsCalculation } from '../services';
-import { applyForDeal } from '../services/applyForDeal'
+import { applyForDeal } from '../services/applyForDeal';
 import {
   getAmountFinancedStatusText,
   getMonthlyPaymentStatusText,
@@ -10,11 +10,18 @@ import {
   checkNoOfPayments,
   ValidationResult
 } from './validations';
+import { ApplicationModal } from '../ApplicationModal/ApplicationModal';
+
+const MODAL_LOADING_TEXT = "Processing your application";
+const MODAL_BUTTON_TEXT = "OK";
 
 export interface CalculationFormState {
   monthlyPayment: string
   amountFinanced: string
   noOfPaymentsResult: string
+  showApplicationModal: boolean,
+  applyForDealMsg: string,
+  modalLoading: boolean,
 }
 
 export class NoOfPaymentsForm extends React.Component<{}, CalculationFormState> {
@@ -24,7 +31,10 @@ export class NoOfPaymentsForm extends React.Component<{}, CalculationFormState> 
     this.state = {
       monthlyPayment: "",
       amountFinanced: "",
-      noOfPaymentsResult: ""
+      noOfPaymentsResult: "",
+      showApplicationModal: false,
+      applyForDealMsg: "",
+      modalLoading: false,
     };
   }
 
@@ -69,18 +79,37 @@ export class NoOfPaymentsForm extends React.Component<{}, CalculationFormState> 
   renderApplicationArea = () => {
     return (
       <div>
-        <button onClick={applyForDeal()} >
+        <button onClick={() => this.applyForDeal()} >
           Apply for deal
         </button>
       </div>
     )
   }
 
+  applyForDeal = async () => {
+    const { amountFinanced, monthlyPayment, noOfPaymentsResult } = this.state;
+    this.setState({ showApplicationModal: true, modalLoading: true })
+    applyForDeal(noOfPaymentsResult, amountFinanced, monthlyPayment)
+    .then(res =>
+      this.setState({ applyForDealMsg: res.data.msg, modalLoading: false })
+    );
+  }
+
+  closeModal = () => this.setState({ showApplicationModal: false, applyForDealMsg: "" });
+
   render = () => {
-    const { monthlyPayment: fieldA, amountFinanced: fieldB, noOfPaymentsResult: result } = this.state;
+    const {
+      monthlyPayment: fieldA,
+      amountFinanced: fieldB,
+      noOfPaymentsResult: result,
+      applyForDealMsg,
+      modalLoading,
+      showApplicationModal
+    } = this.state;
+    console.log('State:', this.state);
     const setNoOfPaymentsResult = (noOfPaymentsResult: string) => this.setState({ noOfPaymentsResult })
-    const setMonthlyPayment = (monthlyPayment: string) => this.setState({ monthlyPayment })
-    const setAmountFinanced = (amountFinanced: string) => this.setState({ amountFinanced })
+    const setMonthlyPayment = (monthlyPayment: string) => this.setState({ monthlyPayment });
+    const setAmountFinanced = (amountFinanced: string) => this.setState({ amountFinanced });
 
     return (
       <div>
@@ -107,6 +136,16 @@ export class NoOfPaymentsForm extends React.Component<{}, CalculationFormState> 
           { result }
         </form>
         { this.allValuesValid() && this.renderApplicationArea() }
+        {
+          showApplicationModal &&
+          ApplicationModal({
+            text: applyForDealMsg,
+            buttonText: MODAL_BUTTON_TEXT,
+            onClick: this.closeModal,
+            loadingText: MODAL_LOADING_TEXT,
+            isLoading: modalLoading}
+          )
+        }
       </div>
     );
   }

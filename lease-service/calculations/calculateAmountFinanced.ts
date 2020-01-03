@@ -1,8 +1,8 @@
 
-export function calculateAmountFinanced(noOfMonths: number, monthlyPayment: number) {
-  if (isNaN(noOfMonths) || isNaN(monthlyPayment)) {
-    console.log('noOfMonths:', noOfMonths, ', monthlyPayment:', monthlyPayment)
+export function calculateAmountFinanced(noOfPayments: number, monthlyPayment: number) {
+  if (isNaN(noOfPayments) || isNaN(monthlyPayment)) {
+    console.log('noOfPayments:', noOfPayments, ', monthlyPayment:', monthlyPayment)
     return null;
   }
-  return Number(monthlyPayment) * Number(noOfMonths);
+  return Number(monthlyPayment) * Number(noOfPayments);
 }

@@ -3,8 +3,8 @@ import { MIN_MONTHS, MAX_MONTHS, MIN_COST, MAX_COST } from '../config'
 export enum ValidationResult {
   TOO_SMALL,
   TOO_BIG,
+  EMPTY,
   OK,
-  EMPTY
 }
 
 export const checkAmountFinanced = (amountFinanced: string): ValidationResult => {
@@ -39,8 +39,8 @@ export const checkMonthlyPayment = (monthlyPayment: string): ValidationResult =>
   return monthlyPaymentNr < 0 ?  ValidationResult.TOO_SMALL : ValidationResult.OK;
 }
 
-export const getNoOfPaymentsStatusText = (noOfMonths: string): string => {
-  const result = checkNoOfPayments(noOfMonths);
+export const getNoOfPaymentsStatusText = (noOfPayments: string): string => {
+  const result = checkNoOfPayments(noOfPayments);
 
   switch (result) {
     case ValidationResult.OK:
