@@ -1,0 +1,17 @@
+
+.calculator-form-container{
+  margin-left: 20%;
+}
+
+.calculator-form-input {
+  padding-bottom: 5px;
+  -webkit-appearance: none;
+}
+
+.calculator-form-input label {
+  display: block;
+}
+
+.calculator-form-result {
+  padding-bottom: 5px;
+}

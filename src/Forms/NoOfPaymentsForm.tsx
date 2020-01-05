@@ -11,6 +11,7 @@ import {
   ValidationResult
 } from './validations';
 import { ApplicationModal } from '../ApplicationModal/ApplicationModal';
+import "./CalculatorForms.css";
 
 const MODAL_LOADING_TEXT = "Processing your application";
 const MODAL_BUTTON_TEXT = "OK";
@@ -143,16 +144,16 @@ export class NoOfPaymentsForm extends React.Component<{}, CalculationFormState> 
           onSubmit={ event => this.onSubmit(event) }
         >
           { showErrors && this.renderInputError() }
-          <label className="calculator-form-input">
-            Monthly payment:
+          <div className="calculator-form-input">
+            <label>Monthly payment:</label>
             <input type="number" value={fieldA} onChange={ event => setMonthlyPayment(event.target.value) } />
-          </label>
-          <label className="calculator-form-input">
-            Car cost:
+          </div>
+          <div className="calculator-form-input">
+            <label>Car cost:</label>
             <input type="number" value={fieldB} onChange={ event => setAmountFinanced(event.target.value) } />
-          </label>
+          </div>
+          <div className="calculator-form-result">No of payments: { Number(result).toFixed(2) }</div>
           <input type="submit" value="Submit" />
-          No of payments: { Number(result).toFixed(2) }
           { this.displayNoOfPaymentsError() }
           { result }
         </form>
@@ -164,8 +165,8 @@ export class NoOfPaymentsForm extends React.Component<{}, CalculationFormState> 
             buttonText: MODAL_BUTTON_TEXT,
             onClick: this.closeModal,
             loadingText: MODAL_LOADING_TEXT,
-            isLoading: modalLoading}
-          )
+            isLoading: modalLoading
+          })
         }
       </div>
     );
