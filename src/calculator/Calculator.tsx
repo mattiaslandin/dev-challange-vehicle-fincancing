@@ -4,6 +4,8 @@ import { Header } from '../Misc/Header';
 import { Tab } from '../Misc/Tab';
 import { CalculationForm, CalculationFormProps } from './CalculationForm';
 import { NoOfPaymentsForm } from '../Forms/NoOfPaymentsForm';
+import { AmountFinancedForm } from '../Forms/AmountFinancedForm';
+import { MonthlyPaymentForm } from '../Forms/MonthlyPaymentForm';
 import * as services from '../services'
 
 const MIN_MONTHS = 6;
@@ -87,20 +89,8 @@ export const Calculator: React.FC = () => {
         />
       </div>
       { activeTab === CalculationType.noOfPayments && <NoOfPaymentsForm /> }
-      { activeTab === CalculationType.amountFinanced && (
-        <>
-          <CalculationForm {...amountFinancedArg} />
-          Resultat: {results.resultB}
-          { displayAmountFinancedError(results.resultB) }
-        </>
-      )}
-      { activeTab === CalculationType.monthlyPayment && (
-        <>
-          <CalculationForm {...monthlyPaymentArg} />
-          Resultat: {results.resultC}
-          {/* { displayMonthlyPaymentError(results.resultC) } */}
-        </>
-      )}
+      { activeTab === CalculationType.amountFinanced && <AmountFinancedForm /> }
+      { activeTab === CalculationType.monthlyPayment && <MonthlyPaymentForm /> }
     </div>
   );
 }
