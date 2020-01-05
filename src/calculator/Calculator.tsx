@@ -1,9 +1,9 @@
 
 import React, { useState } from 'react';
-import { Header } from './Header';
-import { Tab } from './Tab';
+import { Header } from '../Misc/Header';
+import { Tab } from '../Misc/Tab';
 import { CalculationForm, CalculationFormProps } from './CalculationForm';
-import { NoOfPaymentsForm } from './NoOfPaymentsForm';
+import { NoOfPaymentsForm } from '../Forms/NoOfPaymentsForm';
 import * as services from '../services'
 
 const MIN_MONTHS = 6;

@@ -62,7 +62,7 @@ export class NoOfPaymentsForm extends React.Component<{}, CalculationFormState> 
       return null
     }
     return (
-      <div>
+      <div className="calculator-form-error">
         ERROR: {noOfPaymentsErrorTxt}
       </div>
     )
@@ -138,16 +138,16 @@ export class NoOfPaymentsForm extends React.Component<{}, CalculationFormState> 
     const setAmountFinanced = (amountFinanced: string) => this.setState({ amountFinanced });
 
     return (
-      <div>
+      <div className="calculator-form-container">
         <form
           onSubmit={ event => this.onSubmit(event) }
         >
           { showErrors && this.renderInputError() }
-          <label>
+          <label className="calculator-form-input">
             Monthly payment:
             <input type="number" value={fieldA} onChange={ event => setMonthlyPayment(event.target.value) } />
           </label>
-          <label>
+          <label className="calculator-form-input">
             Car cost:
             <input type="number" value={fieldB} onChange={ event => setAmountFinanced(event.target.value) } />
           </label>
