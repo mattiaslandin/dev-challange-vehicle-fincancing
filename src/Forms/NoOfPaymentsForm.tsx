@@ -1,5 +1,5 @@
 import React from "react";
-import { fetchNoOfPaymentsCalculation } from '../services';
+import { fetchNoOfPaymentsCalculation, ServiceResponse } from '../services';
 import { applyForDeal } from '../services/applyForDeal';
 import {
   getAmountFinancedStatusText,
@@ -24,6 +24,7 @@ export interface CalculationFormState {
   showErrors: boolean,
   applyForDealMsg: string,
   modalLoading: boolean,
+  applicationSuccessful: boolean
 }
 
 export class NoOfPaymentsForm extends React.Component<{}, CalculationFormState> {
@@ -38,6 +39,7 @@ export class NoOfPaymentsForm extends React.Component<{}, CalculationFormState> 
       showErrors: false,
       applyForDealMsg: "",
       modalLoading: false,
+      applicationSuccessful: false
     };
   }
 
@@ -101,8 +103,8 @@ export class NoOfPaymentsForm extends React.Component<{}, CalculationFormState> 
     const { amountFinanced, monthlyPayment, noOfPaymentsResult } = this.state;
     this.setState({ showApplicationModal: true, modalLoading: true })
     applyForDeal(noOfPaymentsResult, amountFinanced, monthlyPayment)
-    .then(res =>
-      this.setState({ applyForDealMsg: res.data.msg, modalLoading: false })
+    .then((res: ServiceResponse) =>
+      this.setState({ applicationSuccessful: res.ok, applyForDealMsg: res.data, modalLoading: false })
     );
   }
 
@@ -116,23 +118,27 @@ export class NoOfPaymentsForm extends React.Component<{}, CalculationFormState> 
       monthlyPayment,
       amountFinanced,
     } = this.state;
-    const setNoOfPaymentsResult = (noOfPaymentsResult: string) => this.setState({ noOfPaymentsResult });
+    const setNoOfPaymentsResult = (noOfPaymentsResult: string) =>
+      this.setState({ noOfPaymentsResult });
     if(!this.inputFieldsValid()) {
       this.setState({ showErrors: true });
     } else {
-      fetchNoOfPaymentsCalculation(Number(monthlyPayment), Number(amountFinanced)).then(data => setNoOfPaymentsResult(data.result));
+      fetchNoOfPaymentsCalculation(Number(monthlyPayment), Number(amountFinanced)).then((result: ServiceResponse) => {
+        setNoOfPaymentsResult(result.data);
+      });
     }
   }
 
   render = () => {
     const {
-      monthlyPayment: fieldA,
-      amountFinanced: fieldB,
+      monthlyPayment,
+      amountFinanced,
       noOfPaymentsResult: result,
       applyForDealMsg,
       modalLoading,
       showApplicationModal,
       showErrors,
+      applicationSuccessful
     } = this.state;
     console.log('State:', this.state);
     const setMonthlyPayment = (monthlyPayment: string) => this.setState({ monthlyPayment });
@@ -146,17 +152,17 @@ export class NoOfPaymentsForm extends React.Component<{}, CalculationFormState> 
           { showErrors && this.renderInputError() }
           <div className="calculator-form-input">
             <label>Monthly payment:</label>
-            <input type="number" value={fieldA} onChange={ event => setMonthlyPayment(event.target.value) } />
+            <input disabled={ applicationSuccessful } type="number" value={ monthlyPayment } onChange={ event => setMonthlyPayment(event.target.value) } />
           </div>
           <div className="calculator-form-input">
             <label>Amount financed:</label>
-            <input type="number" value={fieldB} onChange={ event => setAmountFinanced(event.target.value) } />
+            <input disabled={ applicationSuccessful } type="number" value={ amountFinanced } onChange={ event => setAmountFinanced(event.target.value) } />
           </div>
-          <input type="submit" value="Calculate" className="calculator-form-submit" />
+          <input disabled={ applicationSuccessful } type="submit" value="Calculate" className="calculator-form-submit" />
           <div className="calculator-form-result">No of monthly payments: { result }</div>
           { this.displayNoOfPaymentsError() }
         </form>
-        { this.allValuesValid() && this.renderApplicationArea() }
+        { (this.allValuesValid() && !applicationSuccessful) && this.renderApplicationArea() }
         {
           showApplicationModal &&
           ApplicationModal({

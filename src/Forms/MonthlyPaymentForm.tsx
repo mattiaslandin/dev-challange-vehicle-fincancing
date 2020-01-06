@@ -1,5 +1,5 @@
 import React from "react";
-import { fetchMonthlyPaymentCalculation } from '../services';
+import { fetchMonthlyPaymentCalculation, ServiceResponse } from '../services';
 import { applyForDeal } from '../services/applyForDeal';
 import {
   getAmountFinancedStatusText,
@@ -24,6 +24,7 @@ export interface CalculationFormState {
   showErrors: boolean,
   applyForDealMsg: string,
   modalLoading: boolean,
+  applicationSuccessful: boolean
 }
 
 export class MonthlyPaymentForm extends React.Component<{}, CalculationFormState> {
@@ -38,6 +39,7 @@ export class MonthlyPaymentForm extends React.Component<{}, CalculationFormState
       showErrors: false,
       applyForDealMsg: "",
       modalLoading: false,
+      applicationSuccessful: false
     };
   }
 
@@ -101,8 +103,8 @@ export class MonthlyPaymentForm extends React.Component<{}, CalculationFormState
     const { amountFinanced, noOfPayments, monthlyPaymentResult } = this.state;
     this.setState({ showApplicationModal: true, modalLoading: true })
     applyForDeal(noOfPayments, amountFinanced, monthlyPaymentResult)
-    .then(res =>
-      this.setState({ applyForDealMsg: res.data.msg, modalLoading: false })
+    .then((res: ServiceResponse) =>
+      this.setState({ applicationSuccessful: res.ok, applyForDealMsg: res.data, modalLoading: false })
     );
   }
 
@@ -116,27 +118,31 @@ export class MonthlyPaymentForm extends React.Component<{}, CalculationFormState
       noOfPayments,
       amountFinanced,
     } = this.state;
-    const setMonthlyPaymentResult = (monthlyPaymentResult: string) => this.setState({ monthlyPaymentResult });
+    const setMonthlyPaymentResult = (monthlyPaymentResult: string) =>
+      this.setState({ monthlyPaymentResult });
     if(!this.inputFieldsValid()) {
       this.setState({ showErrors: true });
     } else {
-      fetchMonthlyPaymentCalculation(Number(noOfPayments), Number(amountFinanced)).then(data => setMonthlyPaymentResult(data.result));
+      fetchMonthlyPaymentCalculation(Number(noOfPayments), Number(amountFinanced)).then((result: ServiceResponse) => {
+        setMonthlyPaymentResult(result.data);
+      });
     }
   }
 
   render = () => {
     const {
-      noOfPayments: fieldA,
-      amountFinanced: fieldB,
+      amountFinanced,
+      noOfPayments,
       monthlyPaymentResult: result,
       applyForDealMsg,
       modalLoading,
       showApplicationModal,
       showErrors,
+      applicationSuccessful
     } = this.state;
     console.log('State:', this.state);
-    const setNoOfPayments = (noOfPayments: string) => this.setState({ noOfPayments });
     const setAmountFinanced = (amountFinanced: string) => this.setState({ amountFinanced });
+    const setNoOfPayments = (noOfPayments: string) => this.setState({ noOfPayments });
 
     return (
       <div className="calculator-form-container">
@@ -146,17 +152,17 @@ export class MonthlyPaymentForm extends React.Component<{}, CalculationFormState
           { showErrors && this.renderInputError() }
           <div className="calculator-form-input">
             <label>Amount financed:</label>
-            <input type="number" value={fieldA} onChange={ event => setAmountFinanced(event.target.value) } />
+            <input disabled={ applicationSuccessful } type="number" value={ amountFinanced } onChange={ event => setAmountFinanced(event.target.value) } />
           </div>
           <div className="calculator-form-input">
             <label>Number of months (6-36):</label>
-            <input type="number" value={fieldB} onChange={ event => setNoOfPayments(event.target.value) } />
+            <input disabled={ applicationSuccessful } type="number" value={ noOfPayments } onChange={ event => setNoOfPayments(event.target.value) } />
           </div>
-          <input type="submit" value="Calculate" className="calculator-form-submit" />
+          <input disabled={ applicationSuccessful } type="submit" value="Calculate" className="calculator-form-submit" />
           <div className="calculator-form-result">Monthly payment: { result }</div>
           { this.displayNoOfPaymentsError() }
         </form>
-        { this.allValuesValid() && this.renderApplicationArea() }
+        { (this.allValuesValid() && !applicationSuccessful) && this.renderApplicationArea() }
         {
           showApplicationModal &&
           ApplicationModal({

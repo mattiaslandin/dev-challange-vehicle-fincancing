@@ -10,28 +10,28 @@ const port = 3001;
 
 app.use(cors());
 app.use(bodyParser.json())
-app.get('/', (req, res) => res.send('Hello and welcome to siemens vehicle leasing service!'));
+app.get('/', (_req, res) => res.send('Hello and welcome to siemens vehicle leasing service!'));
 
-app.get('/monthlyPayment', (req, res) => {
+app.post('/calculation/monthlyPayment', (req, res) => {
   console.log('/monthlyPayment:', req.body);
-  const noOfPayments = req.query.noOfPayments;
-  const amountFinanced = req.query.amountFinanced;
+  const noOfPayments = req.body.noOfPayments;
+  const amountFinanced = req.body.amountFinanced;
 
   const result = calculateMonthlyPayment(noOfPayments, amountFinanced);
   return res.status(200).json({ result });
 });
-app.get('/noOfPayments', (req, res) => {
+app.post('/calculation/noOfPayments', (req, res) => {
   console.log('/noOfPayments:', req.body);
-  const monthlyPayment = req.query.monthlyPayment;
-  const amountFinanced = req.query.amountFinanced;
+  const monthlyPayment = req.body.monthlyPayment;
+  const amountFinanced = req.body.amountFinanced;
 
   const result = calculateNoOfPayments(monthlyPayment, amountFinanced);
   return res.status(200).json({ result });
 });
-app.get('/amountFinanced', (req, res) => {
+app.post('/calculation/amountFinanced', (req, res) => {
   console.log('/amountFinanced:', req.body);
-  const noOfPayments = req.query.noOfPayments;
-  const monthlyPayment = req.query.monthlyPayment;
+  const noOfPayments = req.body.noOfPayments;
+  const monthlyPayment = req.body.monthlyPayment;
 
   const result = calculateAmountFinanced(noOfPayments, monthlyPayment);
   return res.status(200).json({ result });

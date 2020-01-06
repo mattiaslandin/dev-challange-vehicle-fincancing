@@ -1,11 +1,28 @@
 
-export async function fetchAmountFinancedCalculation(monthlyPayment: number, noOfPayments: number) {
-  const url = 'http://localhost:3001/amountFinanced?monthlyPayment=' + monthlyPayment + '&noOfPayments=' + noOfPayments;
-  const res = await fetch(url);
-  if (res.ok) {
-    return await res.json();
+import { ServiceResponse } from './index';
+
+export async function fetchAmountFinancedCalculation(monthlyPayment: number, noOfPayments: number): Promise<ServiceResponse> {
+  const url = 'http://localhost:3001/calculation/amountFinanced';
+  const resp = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      noOfPayments,
+      monthlyPayment
+    }),
+  });
+  if (resp.ok) {
+    const respJson = await resp.json();
+    return {
+      ok: true,
+      data: respJson.result
+    };
   } else {
-    console.log('Error getting calculation:', res.status);
-    return {};
+    return {
+      ok: false,
+      data: 'Error getting calculation!'
+    };
   }
 }
