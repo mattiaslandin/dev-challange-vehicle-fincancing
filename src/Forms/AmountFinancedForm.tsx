@@ -152,10 +152,9 @@ export class AmountFinancedForm extends React.Component<{}, CalculationFormState
             <label>Number of months (6-36):</label>
             <input type="number" value={fieldB} onChange={ event => setNoOfPayments(event.target.value) } />
           </div>
-          <div className="calculator-form-result">No of payments: { Number(result).toFixed(2) }</div>
-          <input type="submit" value="Submit" />
+          <input type="submit" value="Calculate" className="calculator-form-submit" />
+          <div className="calculator-form-result">Amount financed: { result }</div>
           { this.displayAmountFinancedError() }
-          { result }
         </form>
         { this.allValuesValid() && this.renderApplicationArea() }
         {

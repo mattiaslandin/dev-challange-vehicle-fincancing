@@ -1,0 +1,15 @@
+.calculator-content {
+  margin-left: 20%;
+}
+
+.calculator-tabs {
+  margin-top: 20px;
+}
+
+.calculator-forms {
+  margin-top: 15px;
+}
+
+.calculator-tabs {
+  display: flex;
+}

@@ -1,6 +1,6 @@
 
 .calculator-form-container{
-  margin-left: 20%;
+  /* margin-left: 20%; */
 }
 
 .calculator-form-input {
@@ -10,6 +10,10 @@
 
 .calculator-form-input label {
   display: block;
+}
+
+.calculator-form-submit {
+  margin: 8px 0;
 }
 
 .calculator-form-result {
