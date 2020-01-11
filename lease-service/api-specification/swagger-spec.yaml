@@ -1,0 +1,169 @@
+swagger: "2.0"
+info:
+  description: "Siemens leasing service."
+  version: "1.0.0"
+  title: "Siemens leasing service"
+  contact:
+    email: "landin.mattias@gmail.com"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "localhost:3001"
+tags:
+- name: "calculation"
+  description: "Calculations for your lease"
+- name: "deal"
+  description: "Apply for a leasing deal"
+schemes:
+- "http"
+paths:
+  /calculation/noOfMonths:
+    post:
+      tags:
+      - "calculation"
+      summary: "Calculate number of months needed provided amount financed and monthly payment"
+      description: ""
+      operationId: "calculateNoOfMonths"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Amount financed and monthly payment"
+        required: true
+        schema:
+          type: "object"
+          required:
+          - "amountFinanced"
+          - "monthlyPayment"
+          properties:
+            amountFinanced:
+              type: "number"
+            monthlyPayment:
+              type: "number"
+      responses:
+        200:
+          description: "Successful calculation"
+          schema:
+            type: "object"
+            properties:
+             result:
+              type: "number"
+        400:
+          description: "Invalid input"
+  /calculation/amountFinanced:
+    post:
+      tags:
+      - "calculation"
+      summary: "Calculate amount financed provided number of months and monthly payment"
+      description: ""
+      operationId: "calculateAmountFinaced"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Number of months and monthly payment"
+        required: true
+        schema:
+          type: "object"
+          required:
+          - "noOfMonths"
+          - "monthlyPayment"
+          properties:
+            noOfMonths:
+              type: "number"
+            monthlyPayment:
+              type: "number"
+      responses:
+        200:
+          description: "Successful calculation"
+          schema:
+            type: "object"
+            properties:
+             result:
+              type: "number"
+  /calculation/monthlyPayment:
+    post:
+      tags:
+      - "calculation"
+      summary: "Calculate monthly payment provided number of months and amount financed"
+      description: ""
+      operationId: "calculateMonthlyPayment"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Number of months and amount financed"
+        required: true
+        schema:
+          type: "object"
+          required:
+          - "noOfMonths"
+          - "amountFinanced"
+          properties:
+            noOfMonths:
+              type: "number"
+            amountFinanced:
+              type: "number"
+      responses:
+        200:
+          description: "Successful calculation"
+          schema:
+            type: "object"
+            properties:
+             result:
+              type: "number"
+        400:
+          description: "Invalid input"
+  /deal:
+    post:
+      tags:
+      - "deal"
+      summary: "Apply for a leasing deal"
+      description: ""
+      operationId: "applyForDeal"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "The values of the leasing deal being applied for"
+        required: true
+        schema:
+          type: "object"
+          required:
+          - "noOfMonths"
+          - "amountFinanced"
+          - "monthlyPayment"
+          properties:
+            noOfMonths:
+              type: "number"
+            monthlyPayment:
+              type: "number"
+            amountFinanced:
+              type: "number"
+      responses:
+        200:
+          description: "Successful applied for leasing deal"
+          schema:
+            type: "object"
+            properties:
+             result:
+              type: "number"
+        400:
+          description: "Invalid input"
+          schema:
+            type: "object"
+            properties:
+             msg:
+              type: "string"
