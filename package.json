@@ -20,9 +20,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "server-build": "cd lease-service && tsc",
-    "server-build-and-run": "npm run server-build && node lease-service/dist/server.js",
-    "server-dev": "cd lease-service && npm run server-build-and-run",
+    "server-build": "cd financing-api && tsc",
+    "server-build-and-run": "npm run server-build && node financing-api/dist/server.js",
+    "server-dev": "cd financing-api && npm run server-build-and-run",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

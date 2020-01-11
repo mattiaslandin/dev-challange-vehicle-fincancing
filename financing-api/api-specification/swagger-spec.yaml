@@ -1,8 +1,8 @@
 swagger: "2.0"
 info:
-  description: "Siemens leasing service."
+  description: "Siemens financing service."
   version: "1.0.0"
-  title: "Siemens leasing service"
+  title: "Siemens financing service"
   contact:
     email: "landin.mattias@gmail.com"
   license:

@@ -10,7 +10,7 @@ const port = 3001;
 
 app.use(cors());
 app.use(bodyParser.json())
-app.get('/', (_req, res) => res.send('Hello and welcome to siemens vehicle leasing service!'));
+app.get('/', (_req, res) => res.send('Hello and welcome to siemens vehicle financing service!'));
 
 app.post('/calculation/monthlyPayment', (req, res) => {
   console.log('/monthlyPayment:', req.body);
@@ -38,7 +38,6 @@ app.post('/calculation/amountFinanced', (req, res) => {
 });
 app.post('/deal', (req, res) => {
   console.log('/deal:', req.body);
-  console.log('/validateDeal(req.body.noOfPayments, req.body.amountFinanced, req.body.monthlyPayment):', validateDeal(req.body.noOfPayments, req.body.amountFinanced, req.body.monthlyPayment));
   return validateDeal(req.body.noOfPayments, req.body.amountFinanced, req.body.monthlyPayment) ?
     res.status(200).json({
       msg:'Lease applied for successfully',
@@ -46,8 +45,8 @@ app.post('/deal', (req, res) => {
       amountFinanced: req.body.amountFinanced,
       monthlyPayment: req.body.monthlyPayment
     }) :
-    res.status(400).json({msg: 'Invalid lease parameters!'});
+    res.status(400).json({msg: 'Invalid deal parameters!'});
 });
 
 
-app.listen(port, () => console.log(`Leasing service listening on port ${port}!`));
+app.listen(port, () => console.log(`financing service listening on port ${port}!`));
