@@ -2,9 +2,12 @@
 import React, { useState } from 'react';
 import { Header } from '../Misc/Header';
 import { Tab } from '../Misc/Tab';
-import { NoOfPaymentsForm } from '../Forms/NoOfPaymentsForm';
-import { AmountFinancedForm } from '../Forms/AmountFinancedForm';
-import { MonthlyPaymentForm } from '../Forms/MonthlyPaymentForm';
+import {
+  NoOfPaymentsForm,
+  AmountFinancedForm,
+  MonthlyPaymentForm
+} from './CalculatorForm';
+
 import './Calculator.css';
 
 enum CalculationType {

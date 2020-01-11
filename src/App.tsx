@@ -1,5 +1,5 @@
 import React from 'react';
-import { Calculator } from './calculator/Calculator'
+import { Calculator } from './Calculator/Calculator'
 
 const App: React.FC = () => {
   return (
