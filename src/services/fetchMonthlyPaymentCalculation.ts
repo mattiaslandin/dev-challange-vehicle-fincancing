@@ -1,7 +1,7 @@
 
 import { ServiceResponse } from './index';
 
-export async function fetchMonthlyPaymentCalculation(noOfPayments: number, amountFinanced: number): Promise<ServiceResponse> {
+export async function fetchMonthlyPaymentCalculation(amountFinanced: number, noOfPayments: number): Promise<ServiceResponse> {
   const url = 'http://localhost:3001/calculation/monthlyPayment';
   const resp = await fetch(url, {
     method: 'POST',
