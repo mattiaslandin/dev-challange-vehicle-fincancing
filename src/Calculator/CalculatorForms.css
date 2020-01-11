@@ -3,6 +3,15 @@
   /* margin-left: 20%; */
 }
 
+.calculator-form-input-error {
+  border: 1px solid gray;
+  color: red;
+  padding: 5px;
+  width: 50%;
+  border-radius: 5px;
+  margin-bottom: 5px;
+}
+
 .calculator-form-input {
   padding-bottom: 5px;
   -webkit-appearance: none;

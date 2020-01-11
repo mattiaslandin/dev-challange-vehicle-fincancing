@@ -19,8 +19,8 @@ import {
 import "./CalculatorForms.css";
 
 const noOfPaymentsFormProps = {
-  fieldAText: "Monthly payment",
-  fieldBText: "Amount financed (1000 - 10000)",
+  fieldAText: "Monthly payment €",
+  fieldBText: "Amount financed (1000€ - 10000€)",
   resultText: "Number of months",
   checkFieldA: checkMonthlyPayment,
   checkFieldB: checkAmountFinanced,
@@ -34,9 +34,9 @@ const noOfPaymentsFormProps = {
 }
 
 const amountFinancedFormProps = {
-  fieldAText: "Monthly payment",
+  fieldAText: "Monthly payment €",
   fieldBText: "Number of months (6-36)",
-  resultText: "Amount financed",
+  resultText: "Amount financed (€)",
   checkFieldA: checkMonthlyPayment,
   checkFieldB: checkNoOfPayments,
   checkResult: checkAmountFinanced,
@@ -49,9 +49,9 @@ const amountFinancedFormProps = {
 }
 
 const monthlyPaymentFormProps = {
-  fieldAText: "Amount financed (1000 - 10000)",
+  fieldAText: "Amount financed (1000€ - 10000€)",
   fieldBText: "Number of months (6-36)",
-  resultText: "Monthly payment",
+  resultText: "Monthly payment (€)",
   checkFieldA: checkAmountFinanced,
   checkFieldB: checkNoOfPayments,
   checkResult: checkMonthlyPayment,
@@ -122,9 +122,10 @@ export class CalculatorForm extends React.Component<CalculationFormProps, Calcul
     if (!fieldAErrorTxt && !fieldBErrorTxt) {
       return null
     }
+
     return (
-      <div>
-        ERROR:
+      <div className="calculator-form-input-error" >
+        ERROR:&nbsp;
         {fieldAErrorTxt && fieldAErrorTxt}
         {fieldBErrorTxt && fieldBErrorTxt}
       </div>
