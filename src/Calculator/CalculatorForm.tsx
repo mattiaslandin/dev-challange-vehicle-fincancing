@@ -1,5 +1,5 @@
 import React from "react";
-import { ApplicationModal } from '../ApplicationModal/ApplicationModal';
+import { ApplicationModal } from '../Misc/ApplicationModal';
 import { applyForDeal } from '../services/applyForDeal';
 import {
   fetchNoOfPaymentsCalculation,

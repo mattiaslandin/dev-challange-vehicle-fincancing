@@ -3,6 +3,10 @@ Dev challange for Siemens Financial
 
 Application consists of a React based front end and a NodeJS Express backend API.
 
+## Installation
+
+Run `npm install`
+
 ## Starting application front end
 
 `npm start`
